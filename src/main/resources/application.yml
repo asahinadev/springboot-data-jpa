@@ -1,0 +1,21 @@
+server:
+  port: 9002
+
+  
+spring:  datasource:    url:      "jdbc:mysql://localhost:3306/spring-demo_login"
+    username: "spring-demo"
+    password: "spring-demo"
+    
+    hikari:      data-source-properties:
+        useSSL:         false
+        serverTimezone: "JST"
+
+  jpa:
+    properties:      hibernate.dialect:                "org.hibernate.dialect.MySQL5Dialect"
+      hibernate.dialect.storage_engine: "innodb"
+    hibernate:
+      ddl-auto: none
+
+  flyway:    enabled: true
+
+logging:  level:    com.example: DEBUG
