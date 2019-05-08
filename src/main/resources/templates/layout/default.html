@@ -29,6 +29,13 @@ h1 {
 	padding-bottom: 5px;
 	padding-top: 5px;
 }
+
+label.required:after {
+	margin: 2px;
+	color: red;
+	content	: "*";
+}
+
 </style>
 
 </head>
@@ -60,6 +67,9 @@ h1 {
 	<main role="main" class="container pt-5 px-3 pb-0">
 
 	<h1 class="mt-5" layout:fragment="title">タイトル</h1>
+
+
+	<div class="alert alert-warning d-md-none">画面サイズが推奨されていません。</div>
 
 	<div layout:fragment="contents">コンテンツの内容</div>
 

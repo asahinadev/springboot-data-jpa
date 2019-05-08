@@ -3,21 +3,21 @@
 <head class="h-100">
 
 <meta charset="utf-8" th:remove="tag">
-<title>Spring Security Sample | login</title>
+<title>Spring Security Sample | signin</title>
 
 </head>
 
 <body>
-	<h1 class="mt-5" layout:fragment="title">ログイン</h1>
+	<h1 class="mt-5" layout:fragment="title">利用登録</h1>
 
 	<!-- Begin page content -->
 	<div layout:fragment="contents">
-		<div class="alert alert-warning" th:text="${errors}" th:if="${errors}"></div>
 
+		<div class="alert alert-warning" th:text="${errors}" th:if="${errors}"></div>
 
 		<div class="row">
 			<div class="col-6 offset-2">
-				<form class="card-body" th:action="@{/login}" method="post" th:object="${form}">
+				<form class="card-body" th:action="@{/signin}" method="post" th:object="${form}">
 
 					<div class="form-group row">
 						<label for="username" class="form-label col-md-4 required">アカウント</label>
@@ -28,30 +28,30 @@
 					</div>
 
 					<div class="form-group row">
+						<label for="email" class="form-label col-md-4 required">メールアドレス</label>
+						<div class="col">
+							<input class="form-control" th:field="*{email}" placeholder="Email" th:errorclass="is-invalid">
+							<div th:replace="layout/parts::invalid-feedback(${#fields.errors('email')})"></div>
+						</div>
+					</div>
+
+					<div class="form-group row">
 						<label for="password" class="form-label col-md-4 required">パスワード</label>
 						<div class="col">
 							<input class="form-control" th:field="*{password}" placeholder="Password" th:errorclass="is-invalid">
 							<div th:replace="layout/parts::invalid-feedback(${#fields.errors('password')})"></div>
 						</div>
 					</div>
-					<div class="form-group form-check">
-						<input type="checkbox" name="remember-me" id="remember-me" class="form-check-input" checked="checked" />
-						<!--  -->
-						<label class="form-check-label" for="remember-me">自動ログイン</label>
-					</div>
 
 					<div class="form-group">
-						<button class="btn btn-lg btn-primary btn-block">ログイン</button>
+						<button class="btn btn-primary btn-block">登録</button>
 					</div>
-
 				</form>
 			</div>
 			<div class="col">
 				<div class="list-group">
 					<!--  -->
-					<a th:href="@{/signin}" class="list-group-item">新規登録</a>
-					<!--  -->
-					<a href="#" class="list-group-item">パスワードを忘れた</a>
+					<a th:href="@{/login}" class="list-group-item">ログイン</a>
 				</div>
 			</div>
 		</div>

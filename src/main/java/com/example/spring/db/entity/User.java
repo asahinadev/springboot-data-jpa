@@ -3,7 +3,6 @@ package com.example.spring.db.entity;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -16,6 +15,7 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.spring.db.values.Actived;
 import com.example.spring.db.values.Role;
 
 import lombok.Data;
@@ -56,6 +56,10 @@ public class User implements UserDetails {
 	@Convert(converter = LocalDateTimeConverter.class)
 	LocalDateTime deleted;
 
+	@Column(nullable = true)
+	@Convert(converter = Actived.Converter.class)
+	Actived actived = Actived.ACITEVED;
+
 	@Override
 	@Transient
 	public List<Role> getAuthorities() {
@@ -83,7 +87,7 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// 有効判定
-		return Objects.isNull(deleted);
+		return actived == Actived.ACITEVED;
 	}
 
 }

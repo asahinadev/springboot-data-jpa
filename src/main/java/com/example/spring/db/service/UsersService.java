@@ -5,14 +5,17 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.example.spring.db.entity.User;
 import com.example.spring.db.repository.UsersRepository;
+import com.example.spring.form.UserForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UsersService
 		implements UserDetailsService {
+
+	@Autowired
+	PasswordEncoder passwordEncoder;;
 
 	@Autowired
 	UsersRepository usersRepository;
@@ -47,17 +53,27 @@ public class UsersService
 		return user.get();
 	}
 
+	public User insert(UserForm form) {
+		User user = new User();
+		BeanUtils.copyProperties(form, user);
+		return insert(user);
+	}
+
 	public User insert(User user) {
 		user.setId(UUID.randomUUID().toString());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		log.debug("{}", user);
 		return usersRepository.save(user);
 	}
 
 	public User update(User user) {
+		log.debug("{}", user);
 		return usersRepository.save(user);
 	}
 
 	public User delete(User user) {
 		user.setDeleted(LocalDateTime.now());
+		log.debug("{}", user);
 		return usersRepository.save(user);
 	}
 

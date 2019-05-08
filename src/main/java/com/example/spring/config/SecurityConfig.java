@@ -49,6 +49,7 @@ public class SecurityConfig
 
 		http.authorizeRequests()
 				.antMatchers("/password/generator/**").permitAll()
+				.antMatchers("/signin/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 
