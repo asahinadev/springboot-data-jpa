@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head class="h-100">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100">
+<head>
 
 <meta charset="utf-8">
 
@@ -33,9 +33,8 @@ h1 {
 label.required:after {
 	margin: 2px;
 	color: red;
-	content	: "*";
+	content: "*";
 }
-
 </style>
 
 </head>
@@ -64,20 +63,19 @@ label.required:after {
 	</header>
 
 	<!-- Begin page content -->
-	<main role="main" class="container pt-5 px-3 pb-0">
+	<section class="container pt-5 px-3 pb-0">
 
-	<h1 class="mt-5" layout:fragment="title">タイトル</h1>
+		<h1 class="mt-5" layout:fragment="title">タイトル</h1>
 
+		<div class="alert alert-warning d-md-none">画面サイズが推奨されていません。</div>
 
-	<div class="alert alert-warning d-md-none">画面サイズが推奨されていません。</div>
+		<div layout:fragment="contents">コンテンツの内容</div>
 
-	<div layout:fragment="contents">コンテンツの内容</div>
-
-	</main>
+	</section>
 
 	<footer class="footer fixed-bottom p-3 bg-light">
 		<div class="container px-3">
-			<span class="text-muted">Place sticky footer content here.</span>
+			<span class="text-muted">(C) mirageworld.jp</span>
 		</div>
 	</footer>
 
