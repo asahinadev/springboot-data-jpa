@@ -12,6 +12,11 @@
 	<h1 class="mt-5" layout:fragment="title">ダッシュボード</h1>
 
 	<!-- Begin page content -->
-	<div layout:fragment="contents">コンテンツ</div>
+	<div layout:fragment="contents">
+
+		<div class="alert alert-warning" th:text="${message}" th:if="${message}"></div>
+
+		<div>コンテンツ</div>
+	</div>
 </body>
 </html>

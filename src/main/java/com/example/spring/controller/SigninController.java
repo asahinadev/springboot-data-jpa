@@ -61,7 +61,7 @@ public class SigninController {
 				request.setAttribute("form", form, RequestAttributes.SCOPE_SESSION);
 
 				User user = usersService.insert(form);
-				redirectAttributes.addAttribute("message", "登録に成功しました。");
+				redirectAttributes.addFlashAttribute("message", "登録に成功しました。");
 
 				if (user.isEnabled()) {
 
