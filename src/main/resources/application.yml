@@ -40,7 +40,9 @@ logging:
 app:
   mail:
     from: "[env]"
-
-
-
-
+    template:
+      template-mode:      HTML
+      prefix:             "templates/mail/"
+      suffix:             ".html"
+      character-encoding: UTF-8
+      cacheable:          true

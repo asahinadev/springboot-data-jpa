@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<pre>
+
+このたびは、会員にご登録いただきまして、誠にありがとうございます。
+お客様の登録が完了いたしましたのでご連絡申し上げます。
+
+ご不明な点やご質問などございましたら、お気軽にお問い合せください。
+
+<hr>
+<h3>登録内容</h3>
+
+ログインアカウント：<span th:text="${user.username}"></span>
+メールアドレス    ：<span th:text="${user.email}"></span>
+
+<hr>
+
+ログインページは<a th:href="${login_url}">こちら</a>
+
+<hr>
+
+</pre>
+
+</body>
+
+</html>
