@@ -17,6 +17,14 @@ import com.example.spring.db.service.UsersService;
 public class SecurityConfig
 		extends WebSecurityConfigurerAdapter {
 
+	public static final String LOGIN_URL = "/login";
+	public static final String LOGOUT_URL = "/logout";
+	public static final String SIGNIN_URL = "/signin";
+	public static final String PASSWORD_GEN_URL = "/password/generator/**";
+
+	public static final String PARAM_USERNAME = "username";
+	public static final String PARAM_PASSWORD = "password";
+
 	@Autowired
 	UsersService usersService;
 
@@ -49,19 +57,21 @@ public class SecurityConfig
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
-				.antMatchers("/password/generator/**").permitAll()
-				.antMatchers("/signin/**").permitAll()
+				.antMatchers(PASSWORD_GEN_URL + "/**").permitAll()
+				.antMatchers(SIGNIN_URL + "/**").permitAll()
+				.antMatchers(LOGIN_URL + "/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 
-				.formLogin()
-				.permitAll()
-				.loginPage("/login")
-				.loginProcessingUrl("/login")
-				.failureUrl("/login?error=auth")
+				.formLogin().permitAll()
+
+				.loginPage(LOGIN_URL)
+				.loginProcessingUrl(LOGIN_URL)
+				.failureUrl(LOGIN_URL + "?error=auth")
 				.defaultSuccessUrl("/", true)
-				.usernameParameter("username")
-				.passwordParameter("password")
+
+				.usernameParameter(PARAM_USERNAME)
+				.passwordParameter(PARAM_PASSWORD)
 				.and()
 
 				.rememberMe()
@@ -70,8 +80,8 @@ public class SecurityConfig
 				.httpBasic().disable()
 
 				.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login?logout")
+				.logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
+				.logoutSuccessUrl(LOGIN_URL + "?logout")
 				.and()
 
 		;

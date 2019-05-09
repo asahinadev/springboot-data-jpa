@@ -20,14 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginController {
 
 	@GetMapping
-	public String index(@ModelAttribute("form") LoginForm form) {
+	public String index(@ModelAttribute("form") LoginForm form, Model model, WebRequest request) {
 		return "login";
 	}
 
 	@GetMapping(params = "error")
-	public String error(
-			@ModelAttribute("form") LoginForm form,
-			Model model, WebRequest request,
+	public String error(@ModelAttribute("form") LoginForm form, Model model, WebRequest request,
 			@SessionAttribute(name = WebAttributes.AUTHENTICATION_EXCEPTION, required = false) Exception exception) {
 
 		if (exception == null) {
@@ -41,4 +39,9 @@ public class LoginController {
 		return "login";
 	}
 
+	@GetMapping(params = "logout")
+	public String logout(@ModelAttribute("form") LoginForm form, Model model, WebRequest request) {
+		model.addAttribute("errors", "ログアウトしました。");
+		return "login";
+	}
 }
