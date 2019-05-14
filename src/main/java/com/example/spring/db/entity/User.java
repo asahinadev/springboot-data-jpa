@@ -15,6 +15,7 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.spring.converter.RolesAttributeConverter;
 import com.example.spring.db.values.Actived;
 import com.example.spring.db.values.Role;
 
@@ -60,10 +61,21 @@ public class User implements UserDetails {
 	@Convert(converter = Actived.Converter.class)
 	Actived actived = Actived.ACITEVED;
 
+	@Column(nullable = true)
+	@Convert(converter = Actived.Converter.class)
+	Actived locked = Actived.DISABLED;
+
+	@Column(nullable = true)
+	@Convert(converter = RolesAttributeConverter.class)
+	List<Role> roles;
+
 	@Override
 	@Transient
 	public List<Role> getAuthorities() {
-		return Arrays.asList(Role.ADMIN, Role.USER);
+		if (roles == null) {
+			return Arrays.asList(Role.GUEST);
+		}
+		return roles;
 	}
 
 	@Override
@@ -74,8 +86,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// 否ロック状態
-		return true;
+		return locked == Actived.DISABLED;
 	}
 
 	@Override

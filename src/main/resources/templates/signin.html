@@ -6,6 +6,28 @@
 <meta charset="utf-8" th:remove="tag">
 <title>サンプルプログラム | 利用登録</title>
 
+<style>
+#roles .btn.active {
+	background-color: #007bff;
+}
+
+#actived .btn.active {
+	background-color: #007bff;
+}
+
+#locked .btn.active {
+	background-color: #007bff;
+}
+</style>
+
+
+<script>
+	$(function() {
+		$('label.btn :checked').each(function(i, e) {
+			$(e).parents("label.btn").addClass("active");
+		});
+	});
+</script>
 </head>
 
 <body>
@@ -43,6 +65,49 @@
 							<div th:replace="layout/parts::invalid-feedback(${#fields.errors('password')})"></div>
 						</div>
 					</div>
+
+					<div class="form-group row">
+						<label for="roles" class="form-label col-md-4 required">権限</label>
+						<div class="col" id="roles">
+							<div class="btn-group-toggle mb-3" data-toggle="buttons">
+								<!--  -->
+								<label class="btn btn-secondary btn-block" th:each="item,st : ${roleEnums}"> <!--                                                                                          -->
+									<input type="checkbox" th:value="${item.name()}" th:field="*{roles}" th:errorclass="is-invalid" th:text="${item.name()}">
+								</label>
+                                <input type="hidden" th:if="${#fields.errors('roles')}"  class="form-control is-invalid">
+								<div th:replace="layout/parts::invalid-feedback(${#fields.errors('roles')})"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="actived" class="form-label col-md-4 required">有効化</label>
+						<div class="col" id="actived">
+							<div class="btn-group-toggle mb-3" data-toggle="buttons">
+                                <!--  -->
+								<label class="btn btn-secondary btn-block" th:each="item,st : ${activedEnums}"> <!--                                                                                          -->
+									<input type="radio" th:value="${item.name()}" th:field="*{actived}" th:errorclass="is-invalid" th:text="${item.name()}">
+								</label>
+                                <input type="hidden" th:if="${#fields.errors('actived')}"  class="form-control is-invalid">
+								<div th:replace="layout/parts::invalid-feedback(${#fields.errors('actived')})"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="actived" class="form-label col-md-4 required">ロック状態</label>
+						<div class="col" id="locked">
+							<div class="btn-group-toggle mb-3" data-toggle="buttons">
+								<!--  -->
+								<label class="btn btn-secondary btn-block" th:each="item,st : ${activedEnums}"> <!--                                                                                          -->
+									<input type="radio" th:value="${item.name()}" th:field="*{locked}" th:errorclass="is-invalid" th:text="${item.name()}">
+								</label>
+                                <input type="hidden" th:if="${#fields.errors('locked')}"  class="form-control is-invalid">
+								<div th:replace="layout/parts::invalid-feedback(${#fields.errors('locked')})"></div>
+							</div>
+						</div>
+					</div>
+
 
 					<div class="form-group">
 						<button class="btn btn-primary btn-block">登録</button>

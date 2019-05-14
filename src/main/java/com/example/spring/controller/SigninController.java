@@ -28,6 +28,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.example.spring.db.entity.User;
 import com.example.spring.db.service.MailSenderService;
 import com.example.spring.db.service.UsersService;
+import com.example.spring.db.values.Actived;
+import com.example.spring.db.values.Role;
+import com.example.spring.editor.ActivedPropertyEditorSupport;
+import com.example.spring.editor.RolePropertyEditorSupport;
 import com.example.spring.form.UserForm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +50,18 @@ public class SigninController {
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+		dataBinder.registerCustomEditor(Role.class, new RolePropertyEditorSupport());
+		dataBinder.registerCustomEditor(Actived.class, new ActivedPropertyEditorSupport());
+	}
+
+	@ModelAttribute("roleEnums")
+	public Role[] roles() {
+		return Role.values();
+	}
+
+	@ModelAttribute("activedEnums")
+	public Actived[] activeds() {
+		return Actived.values();
 	}
 
 	@GetMapping
