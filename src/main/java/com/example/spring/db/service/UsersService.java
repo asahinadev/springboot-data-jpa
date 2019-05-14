@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.example.spring.config.AppUserProperties;
 import com.example.spring.db.entity.User;
 import com.example.spring.db.repository.UsersRepository;
 import com.example.spring.form.UserForm;
@@ -29,6 +30,9 @@ public class UsersService
 
 	@Autowired
 	UsersRepository usersRepository;
+
+	@Autowired
+	AppUserProperties userProperties;
 
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -60,8 +64,12 @@ public class UsersService
 	}
 
 	public User insert(User user) {
+
 		user.setId(UUID.randomUUID().toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if (userProperties.getCredentialsExpireDays() > 0) {
+			user.setCredentialsExpire(LocalDateTime.now().plusDays(userProperties.getCredentialsExpireDays()));
+		}
 		log.debug("{}", user);
 		return usersRepository.save(user);
 	}

@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.templatemode.TemplateMode;
 
@@ -13,7 +12,6 @@ import lombok.Data;
 
 @Data
 @Component
-@Configuration
 @SuppressWarnings("serial")
 @ConfigurationProperties("app.mail")
 public class AppMailProperties implements Serializable {

@@ -69,6 +69,10 @@ public class User implements UserDetails {
 	@Convert(converter = RolesAttributeConverter.class)
 	List<Role> roles;
 
+	@Column(nullable = true, name = "credentials_expire")
+	@Convert(converter = LocalDateTimeConverter.class)
+	LocalDateTime credentialsExpire;
+
 	@Override
 	@Transient
 	public List<Role> getAuthorities() {
@@ -79,23 +83,30 @@ public class User implements UserDetails {
 	}
 
 	@Override
+	@Transient
 	public boolean isAccountNonExpired() {
 		// アカウント有効期限内
 		return true;
 	}
 
 	@Override
+	@Transient
 	public boolean isAccountNonLocked() {
 		return locked == Actived.DISABLED;
 	}
 
 	@Override
+	@Transient
 	public boolean isCredentialsNonExpired() {
 		// パスワード有効期限内
-		return true;
+		if (credentialsExpire == null) {
+			return true;
+		}
+		return credentialsExpire.isBefore(LocalDateTime.now());
 	}
 
 	@Override
+	@Transient
 	public boolean isEnabled() {
 		// 有効判定
 		return actived == Actived.ACITEVED;
