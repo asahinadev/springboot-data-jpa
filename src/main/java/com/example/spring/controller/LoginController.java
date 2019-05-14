@@ -17,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/login")
-public class LoginController {
+public class LoginController
+		extends AppController {
 
 	@GetMapping
 	public String index(@ModelAttribute("form") LoginForm form, Model model, WebRequest request) {
