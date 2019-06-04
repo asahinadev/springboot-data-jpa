@@ -1,45 +1,47 @@
 package com.example.spring.form;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.example.spring.db.values.Actived;
-import com.example.spring.db.values.Role;
+import com.example.spring.entity.Roles;
+import com.example.spring.validation.group.Create;
+import com.example.spring.validation.group.Save;
 
 import lombok.Data;
 
 @Data
 public class UserForm {
 
-	@NotEmpty
-	@Pattern(regexp = "^[a-zA-Z0-9]+$")
-	@Length(min = 4, max = 20)
+	String id;
+
+	@NotEmpty(groups = { Save.class, Create.class })
+	@Pattern(regexp = "[\\w]+", groups = { Save.class, Create.class })
+	@Length(min = 4, max = 16, groups = { Save.class, Create.class })
 	String username;
 
-	@NotEmpty
-	@Email
-	@Length(min = 1, max = 255)
+	@NotEmpty(groups = Create.class)
+	@Email(groups = { Save.class, Create.class })
+	@Length(min = 4, max = 255, groups = { Save.class, Create.class })
 	String email;
 
-	@NotEmpty
-	@Pattern(regexp = "^[a-zA-Z0-9]+$")
-	@Length(min = 4, max = 16)
+	@NotEmpty(groups = { Save.class, Create.class })
+	@Pattern(regexp = "[\\w]+", groups = { Save.class, Create.class })
+	@Length(min = 8, max = 16, groups = { Save.class, Create.class })
 	String password;
 
-	@NotEmpty
-	@Size(min = 1)
-	List<Role> roles;
+	boolean enabled;
 
-	@NotNull
-	Actived actived;
+	boolean locked;
 
-	@NotNull
-	Actived locked;
+	LocalDateTime credentialsExpired;
+
+	LocalDateTime accountExpired;
+
+	List<Roles> authorities;
 }

@@ -11,7 +11,7 @@
 <body class="h-100">
 	<header>
 		<nav class="navbar navbar-expand navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">ログイン</a>
+			<a class="navbar-brand" href="#">サインアップ</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#hNavi" aria-controls="hNavi" aria-expanded="false"
 				aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -29,12 +29,21 @@
 			<div class="col-3"></div>
 			<div class="col">
 				<div class="card">
-					<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/login}">
+					<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/signup}">
 
 						<div class="form-group form-row">
 							<label class="col-4" for="username">アカウント</label>
 							<div class="col">
 								<input class="form-control" th:field="*{username}" th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('username'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+							</div>
+						</div>
+
+						<div class="form-group form-row">
+							<label class="col-4" for="email">メールアドレス</label>
+							<div class="col">
+								<input class="form-control" th:field="*{email}" th:errorclass="is-invalid">
+								<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('email'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
 							</div>
 						</div>
 
@@ -42,11 +51,12 @@
 							<label class="col-4" for="password">パスワード</label>
 							<div class="col">
 								<input class="form-control" th:field="*{password}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('password'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
 							</div>
 						</div>
 
 						<div class="col-12">
-							<button class="btn btn-primary btn-block btn-lg">ログイン</button>
+							<button class="btn btn-primary btn-block btn-lg">サインアップ</button>
 						</div>
 
 					</form>
@@ -54,7 +64,7 @@
 			</div>
 			<div class="col-3">
 				<div class="list-group">
-					<a th:href="@{/signup}" class="list-group-item">サインアップ</a>
+					<a th:href="@{/login}" class="list-group-item">ログイン</a>
 				</div>
 			</div>
 		</div>

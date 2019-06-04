@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD `credentials_expire` datetime AFTER `actived`;
