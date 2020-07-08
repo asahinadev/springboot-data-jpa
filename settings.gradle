@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'spring-demo-jpa'
+rootProject.name = 'springboot-data-jpa'
