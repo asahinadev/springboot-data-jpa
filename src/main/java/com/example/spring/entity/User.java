@@ -1,21 +1,13 @@
 package com.example.spring.entity;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @SuppressWarnings("serial")
 @Data
@@ -23,9 +15,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(
+		name = "users",
+		uniqueConstraints = {
+				@UniqueConstraint(columnNames = "username"),
+				@UniqueConstraint(columnNames = "email"),
+		})
 public class User
-		implements UserDetails {
+	implements UserDetails {
 
 	@Id
 	@Column
@@ -52,40 +49,40 @@ public class User
 	@Column(name = "account_expired")
 	LocalDateTime accountExpired;
 
+	@ManyToMany
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	List<Role> roles;
+
 	@Transient
-	List<Roles> authorities;
-
-	public List<Roles> getAuthorities() {
-
-		if (authorities == null || authorities.isEmpty()) {
-			return Arrays.asList(Roles.GUEST);
-		}
-
-		return authorities;
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
-
 		if (accountExpired == null) {
 			return true;
 		}
 		return accountExpired.isAfter(LocalDateTime.now());
 	}
 
+	@Transient
 	@Override
 	public boolean isAccountNonLocked() {
-
 		return !locked;
 	}
 
+	@Transient
 	@Override
 	public boolean isCredentialsNonExpired() {
-
 		if (credentialsExpired == null) {
 			return true;
 		}
 		return credentialsExpired.isAfter(LocalDateTime.now());
 	}
 
+	@Transient
+	@Override
+	public List<Role> getAuthorities() {
+		return roles;
+	}
 }

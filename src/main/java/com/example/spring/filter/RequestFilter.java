@@ -1,24 +1,19 @@
 package com.example.spring.filter;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
-import org.springframework.boot.web.servlet.filter.OrderedFilter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.filter.GenericFilterBean;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
+import org.springframework.boot.web.servlet.filter.*;
+import org.springframework.http.*;
+import org.springframework.web.filter.*;
+import org.springframework.web.util.*;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import lombok.*;
+import lombok.extern.slf4j.*;
 
 @Slf4j
 public class RequestFilter extends GenericFilterBean implements OrderedFilter {

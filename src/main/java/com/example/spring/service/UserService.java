@@ -1,28 +1,21 @@
 package com.example.spring.service;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.time.*;
+import java.util.*;
+import java.util.stream.*;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
 
 import com.example.spring.entity.User;
-import com.example.spring.repository.UserRepository;
+import com.example.spring.repository.*;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class UserService
-		implements UserDetailsService {
+	implements UserDetailsService {
 
 	@Autowired
 	UserRepository userRepository;
@@ -31,37 +24,30 @@ public class UserService
 	PasswordEncoder passwordEncoder;
 
 	public List<User> findAll() {
-
 		return userRepository.findAll();
 	}
 
 	public User findById(String id) {
-
 		return userRepository.findById(id).orElseThrow();
 	}
 
 	public User findByUsername(String username) {
-
 		return userRepository.findByUsername(username).orElseThrow();
 	}
 
 	public User findByEmail(String email) {
-
 		return userRepository.findByEmail(email).orElseThrow();
 	}
 
 	public List<User> insert(Iterable<User> entities) {
-
 		for (User entity : entities) {
 			entity.setId(UUID.randomUUID().toString());
 			changePassword(entity);
 		}
-
 		return userRepository.saveAll(entities);
 	}
 
 	public User insert(User entity) {
-
 		entity.setId(UUID.randomUUID().toString());
 		entity.setEnabled(true);
 		changePassword(entity);
@@ -69,58 +55,38 @@ public class UserService
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		Objects.requireNonNull(username, "username is null");
-
-		User user1 = userRepository.findByUsername(username).orElse(null);
-		User user2 = userRepository.findByEmail(username).orElse(null);
-
-		log.debug("username {}", user1);
-		log.debug("email    {}", user2);
-
-		return Arrays.asList(user1, user2).stream().findFirst().orElseThrow();
+		return userRepository.findByUsername(username)
+				.orElse(userRepository.findByEmail(username).orElse(null));
 	}
 
-	public User save(User entity) {
-
-		User old = userRepository.findById(entity.getId()).orElseThrow();
-
+	public User update(User entity) {
+		User old = findById(entity.getId());
 		if (StringUtils.isEmpty(entity.getPassword())) {
 			entity.setPassword(old.getPassword());
 		} else if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
 			changePassword(entity);
 		}
-
 		return userRepository.save(entity);
 	}
 
-	public void delete(User entity) {
-
-		User old = userRepository.findById(entity.getId()).orElseThrow();
-
-		if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
-			changePassword(entity);
-		}
-
-		userRepository.delete(entity);
-	}
-
-	public List<User> saveAll(Iterable<User> entities) {
-
-		for (User entity : entities) {
-			User old = userRepository.findById(entity.getId()).orElseThrow();
-
+	public List<User> update(Collection<User> entities) {
+		return userRepository.saveAll(entities.stream().map(entity -> {
+			User old = findById(entity.getId());
 			if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
 				changePassword(entity);
 			}
-		}
+			return entity;
+		}).collect(Collectors.toList()));
+	}
 
-		return userRepository.saveAll(entities);
+	public void delete(User entity) {
+		findById(entity.getId());
+		userRepository.delete(entity);
 	}
 
 	private void changePassword(User entity) {
-
 		if (StringUtils.isNotEmpty(entity.getPassword())) {
 			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 			entity.setAccountExpired(LocalDateTime.now().plusDays(60));

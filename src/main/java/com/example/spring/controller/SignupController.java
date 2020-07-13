@@ -1,22 +1,20 @@
 package com.example.spring.controller;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.*;
 
-import com.example.spring.entity.Roles;
-import com.example.spring.entity.User;
-import com.example.spring.form.UserForm;
-import com.example.spring.service.UserService;
-import com.example.spring.validation.group.Create;
+import org.springframework.beans.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+import org.springframework.ui.*;
+import org.springframework.validation.*;
+import org.springframework.validation.annotation.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.*;
+
+import com.example.spring.entity.*;
+import com.example.spring.form.*;
+import com.example.spring.service.*;
+import com.example.spring.validation.group.*;
 
 @Controller
 @RequestMapping(SignupController.URI_PREFIX)
@@ -33,17 +31,22 @@ public class SignupController {
 	@Autowired
 	protected UserService service;
 
-	@ModelAttribute("roles")
-	public Roles[] roles() {
+	@Autowired
+	protected RoleService roles;
 
-		return Roles.values();
+	@ModelAttribute("roles")
+	public List<Role> roles() {
+		return roles.findAll();
 	}
 
 	/**
 	 * create ページ用 (GET).
 	 * 
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_CREATE)
@@ -57,9 +60,13 @@ public class SignupController {
 	/**
 	 * create ページ用 (POST).
 	 * 
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
-	 * @param result  バリデーション結果
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * @param result
+	 *                    バリデーション結果
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@PostMapping(PATH_CREATE)

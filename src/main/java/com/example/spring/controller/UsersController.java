@@ -1,32 +1,25 @@
 package com.example.spring.controller;
 
-import java.util.List;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.*;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.apache.commons.lang3.*;
+import org.springframework.beans.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+import org.springframework.validation.*;
+import org.springframework.validation.annotation.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.*;
+import org.springframework.web.util.*;
 
-import com.example.spring.entity.Roles;
-import com.example.spring.entity.User;
-import com.example.spring.form.UserForm;
-import com.example.spring.service.UserService;
-import com.example.spring.validation.group.Create;
-import com.example.spring.validation.group.Save;
+import com.example.spring.entity.*;
+import com.example.spring.form.*;
+import com.example.spring.service.*;
+import com.example.spring.validation.group.*;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.*;
 
 @Slf4j
 @Controller
@@ -60,10 +53,12 @@ public class UsersController {
 	@Autowired
 	protected UserService service;
 
-	@ModelAttribute("roles")
-	public Roles[] roles() {
+	@Autowired
+	protected RoleService roles;
 
-		return Roles.values();
+	@ModelAttribute("roles")
+	public List<Role> roles() {
+		return roles.findAll();
 	}
 
 	@ModelAttribute("user")
@@ -79,7 +74,9 @@ public class UsersController {
 	/**
 	 * index ページ用.
 	 * 
-	 * @param request リクエスト情報.
+	 * @param request
+	 *                    リクエスト情報.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_INDEX)
@@ -97,8 +94,11 @@ public class UsersController {
 	/**
 	 * create ページ用 (GET).
 	 * 
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_CREATE)
@@ -110,9 +110,13 @@ public class UsersController {
 	/**
 	 * create ページ用 (POST).
 	 * 
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
-	 * @param result  バリデーション結果
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * @param result
+	 *                    バリデーション結果
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@PostMapping(PATH_CREATE)
@@ -141,9 +145,13 @@ public class UsersController {
 	/**
 	 * modify ページ用 (GET).
 	 * 
-	 * @param id      識別用ID
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
+	 * @param id
+	 *                    識別用ID
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_MODIFY)
@@ -163,10 +171,15 @@ public class UsersController {
 	/**
 	 * modify ページ用 (POST).
 	 * 
-	 * @param id      識別用ID
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
-	 * @param result  バリデーション結果
+	 * @param id
+	 *                    識別用ID
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * @param result
+	 *                    バリデーション結果
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@PostMapping(PATH_MODIFY)
@@ -185,7 +198,7 @@ public class UsersController {
 
 		// 更新処理
 		BeanUtils.copyProperties(form, user);
-		user = service.save(user);
+		user = service.update(user);
 		log.debug("user {}", user);
 
 		// 更新結果をリダイレクト先に
@@ -198,9 +211,13 @@ public class UsersController {
 	/**
 	 * view ページ用 (GET).
 	 * 
-	 * @param id      識別用ID
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
+	 * @param id
+	 *                    識別用ID
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_VIEW)
@@ -220,9 +237,13 @@ public class UsersController {
 	/**
 	 * delete ページ用 (GET).
 	 * 
-	 * @param id      識別用ID
-	 * @param request リクエスト情報.
-	 * @param form    入力フォーム.
+	 * @param id
+	 *                    識別用ID
+	 * @param request
+	 *                    リクエスト情報.
+	 * @param form
+	 *                    入力フォーム.
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@GetMapping(PATH_DELETE)
@@ -242,7 +263,9 @@ public class UsersController {
 	/**
 	 * delete ページ用 (POST/DELETE).
 	 * 
-	 * @param id 識別用ID
+	 * @param id
+	 *               識別用ID
+	 * 
 	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
 	 */
 	@PostMapping(PATH_DELETE)

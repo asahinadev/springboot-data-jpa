@@ -1,19 +1,18 @@
 package com.example.spring.form;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
+import javax.validation.constraints.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 
-import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.*;
 
-import com.example.spring.entity.Roles;
-import com.example.spring.validation.group.Create;
-import com.example.spring.validation.group.Save;
+import com.example.spring.entity.*;
+import com.example.spring.validation.group.*;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
 public class UserForm {
@@ -43,5 +42,5 @@ public class UserForm {
 
 	LocalDateTime accountExpired;
 
-	List<Roles> authorities;
+	List<Role> authorities;
 }
