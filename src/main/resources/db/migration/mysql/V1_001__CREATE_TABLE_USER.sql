@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS `users`;
-
 CREATE TABLE `users` (
  `id`                   VARCHAR(255) CHARACTER SET latin1 NOT NULL    ,
  `username`             VARCHAR(255) CHARACTER SET latin1 DEFAULT NULL,
