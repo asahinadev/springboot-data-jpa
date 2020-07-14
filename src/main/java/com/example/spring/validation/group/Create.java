@@ -1,8 +1,5 @@
 package com.example.spring.validation.group;
 
-import javax.validation.*;
-
-@GroupSequence(Save.class)
-public interface Create {
+public interface Create extends Save {
 
 }

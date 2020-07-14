@@ -3,6 +3,7 @@ package com.example.spring.controller;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.propertyeditors.*;
 import org.springframework.http.*;
+import org.springframework.validation.*;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.*;
@@ -34,15 +35,19 @@ public class AppControllerAdvice {
 		binder.registerCustomEditor(Gender.class, genderPropertyEditors);
 	}
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(WebExchangeBindException.class)
-	public Mono<Void> execption(WebExchangeBindException exception) {
+	public Flux<ObjectError> exceptionHandler(WebExchangeBindException exception) {
+		log.warn("エラー件数 {}", exception.getErrorCount());
 		if (log.isDebugEnabled()) {
-			exception.getAllErrors().forEach(error -> {
-				log.debug("{} {}", error.getObjectName(), error.getDefaultMessage());
-			});
+			exception.getAllErrors().forEach(this::log);
 		}
-		return null;
+		return Flux.fromIterable(exception.getAllErrors());
+	}
+
+	private void log(ObjectError e) {
+		log.debug("{}:{}", e.getObjectName(), e.getDefaultMessage());
 	}
 
 }

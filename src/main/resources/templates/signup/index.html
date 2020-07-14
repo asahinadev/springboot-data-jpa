@@ -3,8 +3,42 @@
 
 <head>
 <meta charset="UTF-8">
-
 <th:block th:include="layout::head" />
+
+<script>
+$(function(){
+	var $form = $("form.card-body");
+	$form.on("submit", function() {
+		
+		$.ajax({
+	        type: $form.attr("method"),
+	        url:  $form.attr("action"),
+	        data:JSON.stringify({
+		        username: $form.find("input#username").val(),
+		        email:    $form.find("input#email").val(),
+		        password: $form.find("input#password").val(),
+	        }),
+	        contentType: 'application/json', 
+	        dataType: "json",
+	        success: function(json_data) {
+	            // JSON Arrayの先頭が成功フラグ、失敗の場合2番目がエラーメッセージ
+	            if (!json_data[0]) {    // サーバが失敗を返した場合
+	                alert("Transaction error. " + json_data[1]);
+	                return;
+	            }
+	            // 成功時処理
+	            location.href = "[[@{/login}]]?signup";
+	        },
+	        error: function() {
+	            alert("Server Error. Pleasy try again later.");
+	        },
+	        complete: function() {
+	        }
+	    });		
+		return false;
+	});
+});
+</script>
 
 </head>
 

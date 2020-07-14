@@ -8,6 +8,8 @@ import java.lang.annotation.*;
 import javax.validation.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.*;
+
 /**
  * The annotated {@code CharSequence} must match the specified regular
  * expression.
@@ -24,16 +26,16 @@ import javax.validation.constraints.*;
 @Documented
 @Constraint(validatedBy = {})
 @Pattern(regexp = "^[\\p{Graph}]+$")
-@Size
+@Length
 public @interface Password {
 
 	@OverridesAttribute(constraint = Pattern.class)
 	String message() default "{com.example.spring.validation.Password.message}";
 
-	@OverridesAttribute(constraint = Size.class)
+	@OverridesAttribute(constraint = Length.class)
 	int min() default 16;
 
-	@OverridesAttribute(constraint = Size.class)
+	@OverridesAttribute(constraint = Length.class)
 	int max() default 50;
 
 	Class<?>[] groups() default {};

@@ -14,8 +14,10 @@ import com.example.spring.form.*;
 import com.example.spring.service.*;
 import com.example.spring.validation.group.*;
 
+import lombok.extern.slf4j.*;
 import reactor.core.publisher.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/user")
 public class UsersController {
@@ -39,6 +41,7 @@ public class UsersController {
 
 	@GetMapping("add")
 	public String add(@ModelAttribute("form") UserForm form) {
+		log.debug("form => {}", form);
 		return "/user/form";
 	}
 
@@ -47,12 +50,15 @@ public class UsersController {
 			@ModelAttribute("user") @PathVariable("id") User user,
 			@ModelAttribute("form") UserForm form) {
 		BeanUtils.copyProperties(user, form);
+		log.debug("form => {}", form);
 		return "/user/form";
 	}
 
+	@ResponseBody
 	@PostMapping("add")
 	public Mono<User> addPost(
 			@Validated(Create.class) @RequestBody UserForm form) {
+		log.debug("form => {}", form);
 		return Mono.create(e -> {
 			e.success(service.insert(
 					User.builder()
@@ -65,10 +71,12 @@ public class UsersController {
 		});
 	}
 
+	@ResponseBody
 	@PostMapping("{id}")
 	public Mono<User> updatePost(
 			@PathVariable("id") User user,
 			@Validated(Save.class) @RequestBody UserForm form) {
+		log.debug("form => {}", form);
 		return Mono.create(e -> {
 			user.setUsername(form.getUsername());
 			user.setEmail(form.getEmail());
@@ -79,8 +87,10 @@ public class UsersController {
 		});
 	}
 
+	@ResponseBody
 	@DeleteMapping("{id}")
 	public Mono<Void> delete(@PathVariable("id") User user) {
+		log.debug("form => {}", user);
 		return Mono.create(e -> {
 			service.delete(user);
 		});

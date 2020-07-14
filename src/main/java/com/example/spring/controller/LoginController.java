@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.spring.form.*;
 
+import lombok.extern.slf4j.*;
+
+@Slf4j
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
 	@GetMapping()
 	public String login(@ModelAttribute("form") UserForm form) {
+		log.debug("form => {}", form);
 		return "login";
 	}
 
@@ -23,6 +27,7 @@ public class LoginController {
 			Model model,
 			@ModelAttribute("form") UserForm form,
 			@SessionAttribute(name = WebAttributes.AUTHENTICATION_EXCEPTION, required = false) Exception exception) {
+		log.debug("form => {}", form);
 
 		if (exception == null) {
 			model.addAttribute("message", "エラーが発生しました。");
@@ -47,7 +52,8 @@ public class LoginController {
 	}
 
 	@GetMapping(params = "logout")
-	public String logout(Model model) {
+	public String logout(Model model, @ModelAttribute("form") UserForm form) {
+		log.debug("form => {}", form);
 		model.addAttribute("message", "ログアウトが成功しました。");
 		return "login";
 	}
