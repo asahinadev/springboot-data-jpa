@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" class="h-100">
-
 <head>
-
-<meta charset="UTF-8">
-
+<meta charset="UTF-8" th:remove="all">
 <th:block th:fragment="head">
-
 <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/css/all.min.css}" />
-
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
-<script th:src="@{/js/common.js}"></script>
-
 </th:block>
-
 </head>
 
 <body class="h-100">

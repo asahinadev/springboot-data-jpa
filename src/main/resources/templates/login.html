@@ -3,19 +3,29 @@
 
 <head>
 <meta charset="UTF-8">
-
 <th:block th:include="layout::head" />
-
 </head>
 
 <body class="h-100">
 	<header>
 		<nav class="navbar navbar-expand navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">ログイン</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#hNavi" aria-controls="hNavi" aria-expanded="false"
-				aria-label="Toggle navigation">
+			<a class="navbar-brand" href="#">HOME</a>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+				aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				</ul>
+				<form class="form-inline my-2 mx-1" th:action="@{/signup}">
+					<button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Signup</button>
+				</form>
+				<form class="form-inline my-2 mx-1 disable" th:action="@{/login}">
+					<button class="btn btn-sm btn-success my-2 my-sm-0" type="submit">Login</button>
+				</form>
+			</div>
 		</nav>
 	</header>
 
@@ -25,38 +35,30 @@
 			<div class="alert alert-warning" th:text="${message}">エラーメッセージ</div>
 		</div>
 
-		<div class="row">
-			<div class="col-3"></div>
-			<div class="col">
-				<div class="card">
-					<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/login}">
+		<div class="card w-50 m-auto" style="min-width: 600px">
 
-						<div class="form-group form-row">
-							<label class="col-4" for="username">アカウント</label>
-							<div class="col">
-								<input class="form-control" th:field="*{username}" th:errorclass="is-invalid">
-							</div>
-						</div>
+			<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/login}">
 
-						<div class="form-group form-row">
-							<label class="col-4" for="password">パスワード</label>
-							<div class="col">
-								<input class="form-control" th:field="*{password}" th:errorclass="is-invalid">
-							</div>
-						</div>
-
-						<div class="col-12">
-							<button class="btn btn-primary btn-block btn-lg">ログイン</button>
-						</div>
-
-					</form>
+				<div class="form-group form-row">
+					<label class="col-4" for="username">アカウント</label>
+					<!--  -->
+					<input class="form-control col" th:field="*{username}">
 				</div>
-			</div>
-			<div class="col-3">
-				<div class="list-group">
-					<a th:href="@{/signup}" class="list-group-item">サインアップ</a>
+
+				<div class="form-group form-row">
+					<label class="col-4" for="password">パスワード</label>
+					<!--  -->
+					<input class="form-control col" th:field="*{password}" type="password">
 				</div>
-			</div>
+
+				<div class="row">
+					<div class="offset-8 col-4">
+						<button class="btn btn-primary btn-block">ログイン</button>
+					</div>
+				</div>
+
+
+			</form>
 		</div>
 	</section>
 </body>

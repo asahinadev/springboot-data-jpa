@@ -4,12 +4,9 @@ import java.time.*;
 import java.util.*;
 
 import javax.validation.constraints.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.*;
 
 import com.example.spring.entity.*;
+import com.example.spring.validation.*;
 import com.example.spring.validation.group.*;
 
 import lombok.*;
@@ -17,21 +14,16 @@ import lombok.*;
 @Data
 public class UserForm {
 
-	String id;
-
-	@NotEmpty(groups = { Save.class, Create.class })
-	@Pattern(regexp = "[\\w]+", groups = { Save.class, Create.class })
-	@Length(min = 4, max = 16, groups = { Save.class, Create.class })
+	@NotEmpty(groups = Save.class)
+	@Code(groups = Save.class)
 	String username;
 
-	@NotEmpty(groups = Create.class)
-	@Email(groups = { Save.class, Create.class })
-	@Length(min = 4, max = 255, groups = { Save.class, Create.class })
+	@NotEmpty(groups = Save.class)
+	@Email(groups = Save.class)
 	String email;
 
-	@NotEmpty(groups = { Save.class, Create.class })
-	@Pattern(regexp = "[\\w]+", groups = { Save.class, Create.class })
-	@Length(min = 8, max = 16, groups = { Save.class, Create.class })
+	@NotEmpty(groups = Create.class)
+	@Password(groups = Save.class)
 	String password;
 
 	boolean enabled;

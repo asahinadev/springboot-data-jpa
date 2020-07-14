@@ -1,98 +1,76 @@
 package com.example.spring.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.*;
+import org.springframework.security.config.annotation.web.reactive.*;
+import org.springframework.security.config.web.server.*;
+import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.security.crypto.password.*;
+import org.springframework.security.web.server.*;
 
-import com.example.spring.service.UserService;
+import com.example.spring.service.*;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig
-		extends WebSecurityConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
 
-	public static final String HOME_PAGE = "/";
+	@Bean
+	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+		return http
 
-	public static final String LOGIN_PAGE = "/login";
+				// 認証設定
+				.authorizeExchange()
 
-	public static final String LOGIN_AREA = "/login/**";
+				// 認証不要
+				.pathMatchers("/",
+						"/login/**",
+						"/signup/**",
+						"/webjars/**",
+						"/error/**",
+						"**/*.css",
+						"**/*.js",
+						"**/*.map",
+						"**/*.png",
+						"**/*.jpg",
+						"**/*.gif",
+						"/favicon.ico")
+				.permitAll()
 
-	public static final String ERROR_AREA = "/error/**";
+				// 認証必須
+				.anyExchange().authenticated()
+				.and()
 
-	public static final String SIGNUP_AREA = "/signup/**";
+				// FORM 認証
+				.formLogin()
+				.loginPage("/login")
+				.and()
 
-	public static final String PARAM_USERNAME = "username";
+				// LOGOUT
+				.logout()
+				.logoutUrl("/login?logout")
+				.and()
 
-	public static final String PARAM_PASSWORD = "password";
+				// CSRF
+				.csrf()
+				.disable()
+
+				// CORS
+				.cors()
+				.disable()
+
+				// BASIC 認証
+				.httpBasic()
+				.disable()
+
+				.build();
+	}
 
 	@Autowired
 	UserService userService;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
-
-		super.configure(authentication);
-		authentication
-				.userDetailsService(userService)
-				.passwordEncoder(passwordEncoder());
-
-	}
-
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-
-		// 標準
-		super.configure(web);
-		web.ignoring().antMatchers("/webjars/**", "/error/**", "/css/**", "/js/**", "/image/**", "/favicon.ico");
-
-	}
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-
-		log.debug("{}::configure(http)", getClass());
-
-		// 認可の設定
-		http
-				.antMatcher("/**").authorizeRequests()
-				// エラーページ関連、ホームページ、サインアップ関連、ログイン関連
-				.antMatchers(ERROR_AREA, HOME_PAGE, SIGNUP_AREA, LOGIN_AREA).permitAll()
-				// その他ページ郡
-				.anyRequest().authenticated();
-
-		// ログイン設定
-		http.formLogin()
-				.loginProcessingUrl(LOGIN_PAGE)
-				.loginPage(LOGIN_PAGE)
-				.failureUrl(LOGIN_PAGE + "?error")
-				.defaultSuccessUrl("/")
-				.usernameParameter(PARAM_USERNAME)
-				.passwordParameter(PARAM_PASSWORD)
-				.permitAll();
-
-		// ログアウト設定
-		http.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout**"))
-				.logoutSuccessUrl(LOGIN_PAGE + "?logout")
-		/**/
-		;
-
-	}
 }
