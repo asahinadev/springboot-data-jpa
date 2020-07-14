@@ -41,14 +41,12 @@ public class UserService
 
 	public List<User> insert(Iterable<User> entities) {
 		for (User entity : entities) {
-			entity.setId(UUID.randomUUID().toString());
 			changePassword(entity);
 		}
 		return userRepository.saveAll(entities);
 	}
 
 	public User insert(User entity) {
-		entity.setId(UUID.randomUUID().toString());
 		entity.setEnabled(true);
 		changePassword(entity);
 		return userRepository.save(entity);

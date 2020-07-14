@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 import org.springframework.security.core.userdetails.*;
 
+import com.example.spring.entity.listener.*;
+
 import lombok.*;
 
 @SuppressWarnings("serial")
@@ -21,8 +23,11 @@ import lombok.*;
 				@UniqueConstraint(columnNames = "username"),
 				@UniqueConstraint(columnNames = "email"),
 		})
+@EntityListeners({
+		IdByUUIDListener.class
+})
 public class User
-	implements UserDetails {
+	implements UserDetails, IdByUUID {
 
 	@Id
 	@Column

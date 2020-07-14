@@ -31,21 +31,14 @@ public class RoleService {
 	}
 
 	public List<Role> insert(Iterable<Role> entities) {
-		for (Role entity : entities) {
-			entity.setId(UUID.randomUUID().toString());
-		}
 		return roleRepository.saveAll(entities);
 	}
 
 	public Role insert(Role entity) {
-		entity.setId(UUID.randomUUID().toString());
 		return roleRepository.save(entity);
 	}
 
 	public List<Role> update(Iterable<Role> entities) {
-		for (Role entity : entities) {
-			entity.setId(UUID.randomUUID().toString());
-		}
 		return roleRepository.saveAll(entities);
 	}
 
