@@ -1,5 +1,7 @@
 package com.example.spring.controller;
 
+import javax.persistence.*;
+
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.propertyeditors.*;
 import org.springframework.http.*;
@@ -37,17 +39,21 @@ public class AppControllerAdvice {
 
 	@ResponseBody
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(WebExchangeBindException.class)
-	public Flux<ObjectError> exceptionHandler(WebExchangeBindException exception) {
-		log.warn("エラー件数 {}", exception.getErrorCount());
-		if (log.isDebugEnabled()) {
-			exception.getAllErrors().forEach(this::log);
-		}
+	@ExceptionHandler({
+			WebExchangeBindException.class,
+			BindException.class
+	})
+	public Flux<ObjectError> exceptionHandler(BindingResult exception) {
+		log.warn("エラー件数 {}", exception.getErrorCount(), exception);
 		return Flux.fromIterable(exception.getAllErrors());
 	}
 
-	private void log(ObjectError e) {
-		log.debug("{}:{}", e.getObjectName(), e.getDefaultMessage());
+	@ResponseBody
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(NonUniqueResultException.class)
+	public Flux<String> exceptionHandler(NonUniqueResultException exception) {
+		log.warn("エラー件数 {}", 1, exception);
+		return Flux.just(exception.getMessage());
 	}
 
 }

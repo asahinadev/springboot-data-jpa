@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    class="h-100">
+<head>
+
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<script>
+$(function(){
+    var index_url = $("#index_url").attr("href");
+    $("#headerNavi a.nav-link[href='"+index_url+"']").addClass("active");
+})
+</script>
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+	<header>
+
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+
+			<a class="navbar-brand" href="#" th:text="${title}">レイアウト</a>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerNavi">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="headerNavi">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="#" th:href="@{/}">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="#" th:href="@{/user}">Users</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<div class="container-fluid">
+
+		<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success}">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			[[${success}]]
+		</div>
+
+		<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${warning}">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			[[${warning}]]
+		</div>
+
+		<div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${errors}">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			[[${errors}]]
+		</div>
+
+		<div layout:fragment="contents"></div>
+
+	</div>
+
+	<footer class="footer mt-auto">
+		<div class="container">
+			<span class="text-muted">&nbsp;</span>
+		</div>
+	</footer>
+</body>
+
+</html>

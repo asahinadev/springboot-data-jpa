@@ -9,46 +9,19 @@ import com.example.spring.entity.*;
 import com.example.spring.repository.*;
 
 @Service
-public class RoleService {
+public class RoleService extends CrudService<Role, String, RoleRepository> {
 
 	@Autowired
-	RoleRepository roleRepository;
-
-	public List<Role> findAll() {
-		return roleRepository.findAll();
+	public RoleService(RoleRepository roleRepository) {
+		super(roleRepository);
 	}
 
-	public Role findById(String id) {
-		return roleRepository.findById(id).orElseThrow();
+	public Optional<Role> findByCode(String code) {
+		return repository.findByCode(code);
 	}
 
-	public Role findByCode(String code) {
-		return roleRepository.findByCode(code).orElseThrow();
+	public Optional<Role> findByName(String name) {
+		return repository.findByName(name);
 	}
 
-	public Role findByName(String name) {
-		return roleRepository.findByName(name).orElseThrow();
-	}
-
-	public List<Role> insert(Iterable<Role> entities) {
-		return roleRepository.saveAll(entities);
-	}
-
-	public Role insert(Role entity) {
-		return roleRepository.save(entity);
-	}
-
-	public List<Role> update(Iterable<Role> entities) {
-		return roleRepository.saveAll(entities);
-	}
-
-	public Role update(Role entity) {
-		findById(entity.getId());
-		return roleRepository.save(entity);
-	}
-
-	public void delete(Role entity) {
-		findById(entity.getId());
-		roleRepository.delete(entity);
-	}
 }

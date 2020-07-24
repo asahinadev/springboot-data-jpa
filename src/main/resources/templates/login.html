@@ -1,69 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    class="h-100" 
+    layout:decorator="_common/layout">
 
 <head>
+
 <meta charset="UTF-8">
-<th:block th:include="layout::head" />
+<link rel="contents" th:href="@{/}" id="index_url">
+
+<title>LOGIN</title>
+
 </head>
 
 <body class="h-100">
-	<header>
-		<nav class="navbar navbar-expand navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">HOME</a>
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-				aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+	<div layout:fragment="contents" class="pt-5">
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-				</ul>
-				<form class="form-inline my-2 mx-1" th:action="@{/signup}">
-					<button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Signup</button>
-				</form>
-				<form class="form-inline my-2 mx-1 disable" th:action="@{/login}">
-					<button class="btn btn-sm btn-success my-2 my-sm-0" type="submit">Login</button>
+		<div class="w-50 m-auto">
+
+			<div class="card">
+				<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/login}">
+
+					<div class="form-group form-row">
+						<label class="col-4" for="username">アカウント</label>
+						<!--  -->
+						<input class="form-control col" th:field="*{username}">
+					</div>
+
+					<div class="form-group form-row">
+						<label class="col-4" for="password">パスワード</label>
+						<!--  -->
+						<input class="form-control col" th:field="*{password}" type="password">
+					</div>
+
+					<div class="row">
+						<div class="offset-8 col-4">
+							<button class="btn btn-primary btn-block">ログイン</button>
+						</div>
+					</div>
 				</form>
 			</div>
-		</nav>
-	</header>
+	
+			<div class="list-group mt-5">
+                <div class="list-group-item">
+                    <a href="#" th:href="@{/password/reminder}">パスワードを忘れた型はこちら</a>
+                </div>
+                <div class="list-group-item">
+                    <a href="#" th:href="@{/signup}">新規登録</a>
+                </div>
+			</div>
+        </div>
 
-	<section class="container pt-5">
-
-		<div class="mx-auto w-50 mb-3" th:if="${message}">
-			<div class="alert alert-warning" th:text="${message}">エラーメッセージ</div>
-		</div>
-
-		<div class="card w-50 m-auto" style="min-width: 600px">
-
-			<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/login}">
-
-				<div class="form-group form-row">
-					<label class="col-4" for="username">アカウント</label>
-					<!--  -->
-					<input class="form-control col" th:field="*{username}">
-				</div>
-
-				<div class="form-group form-row">
-					<label class="col-4" for="password">パスワード</label>
-					<!--  -->
-					<input class="form-control col" th:field="*{password}" type="password">
-				</div>
-
-				<div class="row">
-					<div class="offset-8 col-4">
-						<button class="btn btn-primary btn-block">ログイン</button>
-					</div>
-				</div>
-
-
-			</form>
-		</div>
-	</section>
-</body>
-
+	</div>
 
 </body>
 
 </html>
+

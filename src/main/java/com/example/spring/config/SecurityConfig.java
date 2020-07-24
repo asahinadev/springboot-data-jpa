@@ -10,7 +10,6 @@ import org.springframework.security.web.server.*;
 
 import com.example.spring.service.*;
 
-@Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
 

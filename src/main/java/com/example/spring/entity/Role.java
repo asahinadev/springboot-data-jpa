@@ -3,46 +3,34 @@ package com.example.spring.entity;
 import java.util.*;
 
 import javax.persistence.*;
-import javax.persistence.Transient;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import org.springframework.security.core.*;
-
-import com.example.spring.entity.listener.*;
+import org.hibernate.annotations.*;
 
 import lombok.*;
 
-@SuppressWarnings("serial")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "roles",
-		uniqueConstraints = {
-				@UniqueConstraint(columnNames = "code"),
-				@UniqueConstraint(columnNames = "name"),
-		})
-@EntityListeners({
-		IdByUUIDListener.class
+@Table(name = "roles", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "code"),
+		@UniqueConstraint(columnNames = "name"),
 })
-public class Role implements GrantedAuthority, IdByUUID {
+public class Role implements CrudEntity {
 
 	@Id
-	@Column(length = 255, nullable = false)
+	@Column
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
 	String id;
 
-	@Column(length = 255, nullable = false)
+	@Column
 	String code;
 
-	@Column(length = 255, nullable = false)
+	@Column
 	String name;
 
-	@ManyToMany(mappedBy = "roles")
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
 	List<User> users;
 
-	@Transient
-	@Override
-	public String getAuthority() {
-		return name;
-	}
 }

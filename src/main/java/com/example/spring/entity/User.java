@@ -4,33 +4,31 @@ import java.time.*;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import org.springframework.security.core.userdetails.*;
-
-import com.example.spring.entity.listener.*;
+import org.hibernate.annotations.*;
+import org.springframework.data.annotation.*;
+import org.springframework.data.jpa.domain.support.*;
 
 import lombok.*;
 
-@SuppressWarnings("serial")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(
-		name = "users",
-		uniqueConstraints = {
-				@UniqueConstraint(columnNames = "username"),
-				@UniqueConstraint(columnNames = "email"),
-		})
-@EntityListeners({
-		IdByUUIDListener.class
+@Table(name = "users", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "username"),
+		@UniqueConstraint(columnNames = "email"),
 })
-public class User
-	implements UserDetails, IdByUUID {
+@EntityListeners({
+		AuditingEntityListener.class
+})
+public class User implements CrudEntity {
 
 	@Id
 	@Column
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
 	String id;
 
 	@Column
@@ -54,40 +52,22 @@ public class User
 	@Column(name = "account_expired")
 	LocalDateTime accountExpired;
 
-	@ManyToMany
+	@CreatedDate
+	@Column(name = "created")
+	LocalDateTime created;
+
+	@LastModifiedDate
+	@Column(name = "updated")
+	LocalDateTime updated;
+
+	@Column(name = "deleted")
+	LocalDateTime deleted;
+
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	List<Role> roles;
 
-	@Transient
-	@Override
-	public boolean isAccountNonExpired() {
-		if (accountExpired == null) {
-			return true;
-		}
-		return accountExpired.isAfter(LocalDateTime.now());
-	}
-
-	@Transient
-	@Override
-	public boolean isAccountNonLocked() {
-		return !locked;
-	}
-
-	@Transient
-	@Override
-	public boolean isCredentialsNonExpired() {
-		if (credentialsExpired == null) {
-			return true;
-		}
-		return credentialsExpired.isAfter(LocalDateTime.now());
-	}
-
-	@Transient
-	@Override
-	public List<Role> getAuthorities() {
-		return roles;
-	}
 }

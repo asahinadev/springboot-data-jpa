@@ -5,19 +5,18 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.*;
 
 import com.example.spring.validation.*;
-import com.example.spring.validation.group.*;
 
 import lombok.*;
 
 @Data
-public class GenderForm {
+public class GenderForm implements CrudForm {
 
-	@NotEmpty(groups = Save.class)
-	@Code(groups = Save.class)
+	@NotEmpty
+	@Code
 	String code;
 
-	@NotEmpty(groups = Save.class)
-	@Length(min = 8, max = 16, groups = Save.class)
+	@NotEmpty
+	@Length(min = 8, max = 16)
 	String name;
 
 }

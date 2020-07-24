@@ -4,6 +4,9 @@ spring:
     encoding: UTF-8
     validate-on-migrate: true
     clean-on-validation-error: true
+    url: "jdbc:mysql://localhost:3306/spring"
+    user: "root"
+    password: "spring" 
 
   thymeleaf:
     cache: false
@@ -25,6 +28,7 @@ spring:
         allowPublicKeyRetrieval: true
 
   jpa:    hibernate:      ddl-auto: validate
+    show-sql: true
 
   jackson:    date-format: "yyyy-MM-dd'T'HH:mm:ss"
     property-naming-strategy: "com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy"

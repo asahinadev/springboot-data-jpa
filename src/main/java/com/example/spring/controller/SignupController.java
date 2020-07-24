@@ -1,6 +1,7 @@
 package com.example.spring.controller;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,29 +19,34 @@ import reactor.core.publisher.*;
 @RequestMapping("/signup")
 public class SignupController {
 
+	protected final UserService service;
+	protected final PasswordEncoder encoder;
+
 	@Autowired
-	protected UserService service;
+	public SignupController(UserService service, PasswordEncoder encoder) {
+		this.service = service;
+		this.encoder = encoder;
+	}
 
 	@GetMapping("")
-	public String add(@ModelAttribute("form") UserForm form) {
+	public String get(@ModelAttribute("form") UserForm form) {
 		log.debug("form => {}", form);
 		return "/signup/index";
 	}
 
 	@ResponseBody
 	@PostMapping("")
-	public Mono<User> addPost(
-			@Validated(Create.class) @RequestBody UserForm form) {
+	@Validated(Create.class)
+	public Mono<User> post(@RequestBody UserForm form) {
 		log.debug("form => {}", form);
-		return Mono.create(e -> {
-			e.success(service.insert(
-					User.builder()
-							.username(form.getUsername())
-							.email(form.getEmail())
-							.password(form.getPassword())
-							.enabled(true)
-							.locked(false)
-							.build()));
-		});
+
+		User entity = new User();
+		entity.setUsername(form.getUsername());
+		entity.setEmail(form.getEmail());
+		entity.setPassword(encoder.encode(form.getPassword()));
+		entity.setEnabled(true);
+		entity.setLocked(false);
+
+		return Mono.just(service.insert(entity));
 	}
 }

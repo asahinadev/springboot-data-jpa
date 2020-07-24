@@ -15,4 +15,12 @@ public interface UserRepository
 
 	public Optional<User> findByEmail(String email);
 
+	public long countByUsername(String username);
+
+	public long countByEmail(String email);
+
+	public long countByUsernameAndIdNot(String username, String id);
+
+	public long countByEmailAndIdNot(String email, String id);
+
 }

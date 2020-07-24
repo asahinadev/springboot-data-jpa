@@ -1,43 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100" layout:decorator="_common/layout">
 
 <head>
-<meta charset="UTF-8">
 
-<th:block th:include="layout::head" />
+<meta charset="UTF-8">
+<link rel="contents" th:href="@{/user}" id="index_url">
+
+<title>USERS</title>
 
 </head>
 
-<body class="h-100">
+<body>
+	<div layout:fragment="contents" class="pt-5">
 
-	<header th:replace="layout::header('ユーザー管理', 'users')">
-		<!-- 共通レイアウト -->
-	</header>
+		<h2 class="card-title">ユーザー登録</h2>
 
-	<section class="container mx-auto pt-5">
+		<div class="row">
+			<div class="col-8">
 
-		<div class="card">
-			<div class="card-body">
-				<h2 class="card-title">ユーザー登録</h2>
+				<div class="card">
 
-				<div th:replace="layout::alert_success(${success})">処理成功時のメッセージ</div>
-				<div th:replace="layout::alert_danger(${message})">処理失敗時のメッセージ</div>
+					<form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/signup}">
 
-				<div class="row">
-					<div class="col-8">
-						<div class="card" th:replace="user/layout::form('登録', @{/user/create})">
+						<div class="form-group form-row">
+							<label class="col-4" for="username">アカウント</label>
 							<!--  -->
+							<input class="form-control col" th:field="*{username}" required pattern="^[a-zA-Z0-9]{8,16}">
+							<div class="valid-feedback">必須項目／半角英数／8～16文字</div>
+							<div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
 						</div>
+
+						<div class="form-group form-row">
+							<label class="col-4" for="email">メールアドレス</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{email}" type="email" required pattern=".*@.*\..*">
+							<div class="valid-feedback">必須項目／メールアドレス形式</div>
+							<div class="invalid-feedback">必須項目／メールアドレス形式</div>
+						</div>
+
+						<div class="form-group form-row">
+							<label class="col-4" for="password">パスワード</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{password}" type="password" required pattern="^[a-zA-Z0-9]{8,16}">
+							<div class="valid-feedback">必須項目／半角英数／8～16文字</div>
+							<div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
+						</div>
+
+						<div class="row">
+							<div class="offset-8 col-4">
+								<button class="btn btn-primary btn-block">登録</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+
+				<div class="list-group mt-5">
+					<div class="list-group-item">
+						<a href="#" th:href="@{/login}">ログイン</a>
 					</div>
-					<div class="col">
-						<div th:replace="user/layout::sNavi('create', ${user})">
-							<!--  -->
-						</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="list-group">
+					<div class="list-group-item">
+						<a class="fas fa-list" th:href="@{/user}" title="一覧">&nbsp;一覧</a>
+					</div>
+					<div class="list-group-item">
+						<a class="fas fa-user-plus" th:href="@{/user/add}" title="登録">&nbsp;新規登録</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </body>
-
 </html>
+

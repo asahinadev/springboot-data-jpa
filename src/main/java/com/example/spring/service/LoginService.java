@@ -15,8 +15,6 @@ public class LoginService
 
 	@Override
 	public Mono<UserDetails> findByUsername(String username) {
-		return Mono.create(e -> {
-			e.success(service.loadUserByUsername(username));
-		});
+		return Mono.just(service.loadUserByUsername(username));
 	}
 }

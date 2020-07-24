@@ -22,18 +22,18 @@ import org.hibernate.validator.constraints.*;
  */
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Repeatable(Password.List.class)
+@Repeatable(Username.List.class)
 @Documented
 @Constraint(validatedBy = {})
-@Pattern(regexp = "^[\\p{Graph}]+$")
+@Pattern(regexp = "^[\\p{Alnum}]+$")
 @Length
-public @interface Password {
+public @interface Username {
 
 	@OverridesAttribute(constraint = Pattern.class)
-	String message() default "{com.example.spring.validation.Password.message}";
+	String message() default "{com.example.spring.validation.Code.message}";
 
 	@OverridesAttribute(constraint = Length.class)
-	int min() default 8;
+	int min() default 2;
 
 	@OverridesAttribute(constraint = Length.class)
 	int max() default 50;
@@ -47,7 +47,7 @@ public @interface Password {
 	@Documented
 	@interface List {
 
-		Password[] value();
+		Username[] value();
 	}
 
 }

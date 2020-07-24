@@ -1,39 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100" layout:decorator="_common/layout">
 
 <head>
+
 <meta charset="UTF-8">
-<th:block th:include="layout::head" />
+<link rel="contents" th:href="@{/}" id="index_url">
+
+<title>SIGN UP</title>
 
 <script>
 $(function(){
 	var $form = $("form.card-body");
 	$form.on("submit", function() {
+
+		if ($form.find(":invalid").length > 0) {
+			alert("入力項目にエラーがあります。");
+			return false;
+		}
+
+		var method = $form.attr("method");
+		var action = $form.attr("action")
+		var data = JSON.stringify({
+	        username: $form.find("input#username").val(),
+	        email:    $form.find("input#email").val(),
+	        password: $form.find("input#password").val(),
+        });
+        
+		var success = function (data, status) {
+			alert("登録が完了しました。");
+            location.href = "[[@{/login}]]?signup";
+		};
+		
+		var error = function(xhr, status, errorThrown) {
+			alert("サーバー側でエラーが発生しました。");
+			console.log([xhr, status, errorThrown]);
+
+			var json_data = JSON.parse(xhr.responseText);
+        	for (var i  in json_data) {
+	        	console.log(json_data[i]);
+	        	console.log(json_data[i].code);
+	        	console.log(json_data[i].default_message);
+        	}
+		}
+
+		var complete = function(){
+		}
+        
 		
 		$.ajax({
-	        type: $form.attr("method"),
-	        url:  $form.attr("action"),
-	        data:JSON.stringify({
-		        username: $form.find("input#username").val(),
-		        email:    $form.find("input#email").val(),
-		        password: $form.find("input#password").val(),
-	        }),
+	        type:        method,
+	        url:         action,
+	        data:        data ,
 	        contentType: 'application/json', 
-	        dataType: "json",
-	        success: function(json_data) {
-	            // JSON Arrayの先頭が成功フラグ、失敗の場合2番目がエラーメッセージ
-	            if (!json_data[0]) {    // サーバが失敗を返した場合
-	                alert("Transaction error. " + json_data[1]);
-	                return;
-	            }
-	            // 成功時処理
-	            location.href = "[[@{/login}]]?signup";
-	        },
-	        error: function() {
-	            alert("Server Error. Pleasy try again later.");
-	        },
-	        complete: function() {
-	        }
+	        dataType:    'json',
+	        success:     success ,
+	        error:       error,
+	        complete:    complete 
 	    });		
 		return false;
 	});
@@ -42,70 +64,59 @@ $(function(){
 
 </head>
 
-<body class="h-100">
-	<header>
-		<nav class="navbar navbar-expand navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">HOME</a>
+<div layout:fragment="contents" class="pt-5">
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-				aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+	<div class="w-50 m-auto">
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-				</ul>
-				<form class="form-inline my-2 mx-1" th:action="@{/signup}">
-					<button class="btn btn-sm btn-success my-2 my-sm-0" type="submit">Signup</button>
-				</form>
-				<form class="form-inline my-2 mx-1" th:action="@{/login}">
-					<button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Login</button>
-				</form>
-			</div>
-		</nav>
-	</header>
+		<div class="card">
 
-	<section class="container pt-5">
-
-		<div class="mx-auto w-50 mb-3" th:if="${message}">
-			<div class="alert alert-warning" th:text="${message}">エラーメッセージ</div>
-		</div>
-
-		<div class="card w-50 m-auto" style="min-width: 600px">
-
-			<form class="card-body needs-validation" novalidate th:object="${form}" method="POST" th:action="@{/signup}">
+			<form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/signup}">
 
 				<div class="form-group form-row">
 					<label class="col-4" for="username">アカウント</label>
 					<!--  -->
-					<input class="form-control col" th:field="*{username}">
+					<input class="form-control col" th:field="*{username}" required pattern="^[a-zA-Z0-9]{8,16}">
+					<div class="valid-feedback">必須項目／半角英数／8～16文字</div>
+					<div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
 				</div>
 
 				<div class="form-group form-row">
 					<label class="col-4" for="email">メールアドレス</label>
 					<!--  -->
-					<input class="form-control col" th:field="*{email}">
+					<input class="form-control col" th:field="*{email}" type="email" required pattern=".*@.*\..*">
+					<div class="valid-feedback">必須項目／メールアドレス形式</div>
+					<div class="invalid-feedback">必須項目／メールアドレス形式</div>
 				</div>
 
 				<div class="form-group form-row">
 					<label class="col-4" for="password">パスワード</label>
 					<!--  -->
-					<input class="form-control col" th:field="*{password}" type="password">
+					<input class="form-control col" th:field="*{password}" type="password" required pattern="^[a-zA-Z0-9]{8,16}">
+					<div class="valid-feedback">必須項目／半角英数／8～16文字</div>
+					<div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
 				</div>
 
 				<div class="row">
 					<div class="offset-8 col-4">
-						<button class="btn btn-primary btn-block">ログイン</button>
+						<button class="btn btn-primary btn-block">登録</button>
 					</div>
 				</div>
 
-
 			</form>
-		</div>
-	</section>
-</body>
 
+		</div>
+
+		<div class="list-group mt-5">
+			<div class="list-group-item">
+				<a href="#" th:href="@{/login}">ログイン</a>
+			</div>
+		</div>
+	</div>
+
+</div>
 
 </body>
 
 </html>
+
+

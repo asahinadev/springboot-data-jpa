@@ -1,35 +1,32 @@
 package com.example.spring.entity;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import com.example.spring.entity.listener.*;
+import org.hibernate.annotations.*;
 
 import lombok.*;
 
-@SuppressWarnings("serial")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "genders",
 		uniqueConstraints = {
 				@UniqueConstraint(columnNames = "code"),
 				@UniqueConstraint(columnNames = "name"),
 		})
-@EntityListeners({
-		IdByUUIDListener.class
-})
-public class Gender implements IdByUUID {
+public class Gender implements CrudEntity {
 
 	@Id
-	@Column(length = 255, nullable = false)
+	@Column
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
 	String id;
 
-	@Column(length = 255, nullable = false)
+	@Column
 	String code;
 
-	@Column(length = 255, nullable = false)
+	@Column
 	String name;
 
 }

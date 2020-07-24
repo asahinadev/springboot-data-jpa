@@ -1,95 +1,63 @@
 package com.example.spring.service;
 
-import java.time.*;
 import java.util.*;
-import java.util.stream.*;
 
-import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
 import com.example.spring.entity.User;
 import com.example.spring.repository.*;
+import com.example.spring.user.*;
+
+import reactor.core.publisher.*;
 
 @Service
 public class UserService
+	extends CrudService<User, String, UserRepository>
 	implements UserDetailsService {
 
 	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
-	public List<User> findAll() {
-		return userRepository.findAll();
+	public UserService(UserRepository userRepository) {
+		super(userRepository);
 	}
 
-	public User findById(String id) {
-		return userRepository.findById(id).orElseThrow();
+	public long countByUsername(String username) {
+		return repository.countByUsername(username);
 	}
 
-	public User findByUsername(String username) {
-		return userRepository.findByUsername(username).orElseThrow();
+	public long countByEmail(String email) {
+		return repository.countByEmail(email);
 	}
 
-	public User findByEmail(String email) {
-		return userRepository.findByEmail(email).orElseThrow();
+	public long countByUsername(String username, String ignoreId) {
+		return repository.countByUsernameAndIdNot(username, ignoreId);
 	}
 
-	public List<User> insert(Iterable<User> entities) {
-		for (User entity : entities) {
-			changePassword(entity);
-		}
-		return userRepository.saveAll(entities);
+	public long countByEmail(String email, String ignoreId) {
+		return repository.countByEmailAndIdNot(email, ignoreId);
 	}
 
-	public User insert(User entity) {
-		entity.setEnabled(true);
-		changePassword(entity);
-		return userRepository.save(entity);
+	public Optional<User> findByUsername(String username) {
+		return repository.findByUsername(username);
+	}
+
+	public Optional<User> findByEmail(String email) {
+		return repository.findByEmail(email);
 	}
 
 	@Override
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Objects.requireNonNull(username, "username is null");
-		return userRepository.findByUsername(username)
-				.orElse(userRepository.findByEmail(username).orElse(null));
-	}
 
-	public User update(User entity) {
-		User old = findById(entity.getId());
-		if (StringUtils.isEmpty(entity.getPassword())) {
-			entity.setPassword(old.getPassword());
-		} else if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
-			changePassword(entity);
-		}
-		return userRepository.save(entity);
-	}
+		return Mono.first(
+				Mono.just(repository.findByUsername(username)),
+				Mono.just(repository.findByEmail(username))
 
-	public List<User> update(Collection<User> entities) {
-		return userRepository.saveAll(entities.stream().map(entity -> {
-			User old = findById(entity.getId());
-			if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
-				changePassword(entity);
-			}
-			return entity;
-		}).collect(Collectors.toList()));
-	}
-
-	public void delete(User entity) {
-		findById(entity.getId());
-		userRepository.delete(entity);
-	}
-
-	private void changePassword(User entity) {
-		if (StringUtils.isNotEmpty(entity.getPassword())) {
-			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-			entity.setAccountExpired(LocalDateTime.now().plusDays(60));
-			entity.setCredentialsExpired(LocalDateTime.now().plusDays(30));
-		}
+		// 検索箇所を増やす場合は上記を利用
+		).map(e -> {
+			return e.get();
+		}).map(UserDetailsImpl::new).block();
 	}
 
 }
