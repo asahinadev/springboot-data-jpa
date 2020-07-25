@@ -1,75 +1,28 @@
 $(function() {
+    var $form = $("form.card-body");
+    $form.on("submit", function() {
 
-	// FORM
-	var $form = $("#form1");
-	
-	// 選択ダイアログ
-	var confirmeEl = document.getElementById('confirme');
-	var $confirme  = $(confirmeEl);
-	var bConfirme   = new bootstrap.Modal(confirmeEl, {
-		keyboard : false
-	});
-	
+        if ($form.find(":invalid").length > 0) {
+            alert("入力項目にエラーがあります。");
+            return false;
+        }
 
-	// アラートダイアログ
-	var alertEl = document.getElementById('alert');
-	var $alert  = $(alertEl);
-	var bAlert = new bootstrap.Modal(alertEl, {
-		keyboard : false
-	});
-
-	// 送信処理
-	$confirme.find(".modal-body > p").text($("#confime_msg").attr("content"));
-	$confirme.find(".modal-footer .btn-primary").on("click", function(){
-		
-		$.ajax({
-			
-			type        : $form.attr("method"),
-			url         : $form.attr("action"),
-			data        : parseJson($form),
-			dataType    : "json",
-			contentType : 'application/json; charset=utf-8',
-			
-		}).then(function(data) {
-
-			// ダイアログ
-			$alert.find(".modal-body > p").text("正常に終了しました。");
-			alertEl.addEventListener('hidden.bs.modal', function(e) {
-				location.href = $("#redirect_url").attr("content");
-			})
-			bAlert.show()
-
-		}, function(data, type, status) {
-			
-			// ダイアログ表示
-			$alert.find(data.responseJSON[0].defaultMessage);
-			bAlert.show()
-		});
-		
-		// ダイアログを閉じる
-		bConfirme.hide();
-	})
-	
-	// エラーメッセージ
-	function invalid() {
-		// ダイアログ
-		$alert.find(".modal-body > p").text("エラーがあります。確認してください。");
-		bAlert.show()
-
-	}
-
-	// 送信ボタン
-	$("#btn1").on("click", function() {
-		
-		if ($form.find(".form-control:invalid").length != 0) {
-			
-			// ダイアログ表示
-			invalid();
-			
-			return false;
-		} 
-		bConfirme.show();
-
-		return false;
-	})
+        fetchPost(
+            $form.attr("action"),
+            JSON.stringify({
+                username: $form.find("input#username").val(),
+                email: $form.find("input#email").val(),
+                password: $form.find("input#password").val(),
+            }),
+            responce => {
+                console.log(responce);
+                alert("登録が完了しました。");
+                location.href = "./login";
+            },
+            error => {
+                console.log(error);
+                alert("サーバー側でエラーが発生しました。");
+            });
+        return false;
+    });
 })
