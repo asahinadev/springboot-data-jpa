@@ -13,10 +13,11 @@ public class RoleForm implements CrudForm {
 
 	@NotEmpty
 	@Code
+	@Length(min = 4, max = 50)
 	String code;
 
 	@NotEmpty
-	@Length(min = 8, max = 16)
+	@Length(min = 4, max = 50)
 	String name;
 
 }

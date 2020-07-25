@@ -33,9 +33,9 @@
                         <div class="form-group form-row">
                             <label class="col-4" for="name">表示名</label>
                             <!--  -->
-                            <input class="form-control col" th:field="*{name}" required pattern="^[a-zA-Z0-9]{4,50}">
-                            <div class="valid-feedback">必須項目／半角英数／4～50文字</div>
-                            <div class="invalid-feedback">必須項目／半角英数／4～50文字</div>
+                            <input class="form-control col" th:field="*{name}" required pattern="^.{4,50}">
+                            <div class="valid-feedback">必須項目／4～50文字</div>
+                            <div class="invalid-feedback">必須項目／4～50文字</div>
                         </div>
                         
 						<div class="row my-3">
