@@ -8,19 +8,67 @@
 
 <title>USERS</title>
 
-</head>
 
+<script>
+$(function(){
+    var $form = $("form.card-body");
+    $form.on("submit", function() {
+
+        if ($form.find(":invalid").length > 0) {
+            alert("入力項目にエラーがあります。");
+            return false;
+        }
+
+        var method = $form.attr("method");
+        var action = $form.attr("action")
+        var data = JSON.stringify({
+            username: $form.find("input#username").val(),
+            email:    $form.find("input#email").val(),
+            password: $form.find("input#password").val(),
+        });
+        
+        var success = function (data, status) {
+            alert("登録が完了しました。");
+            console.log(data);
+            location.href = location.href;
+        };
+        
+        var error = function(xhr, status, errorThrown) {
+            alert("エラーが発生しました。");
+            console.log([xhr, status, errorThrown]);
+        }
+
+        var complete = function(){
+        }
+        
+        
+        $.ajax({
+            type:        method,
+            url:         action,
+            data:        data ,
+            contentType: 'application/json', 
+            dataType:    'json',
+            success:     success ,
+            error:       error,
+            complete:    complete 
+        });     
+        return false;
+    });
+});
+</script>
+
+</head>
 <body>
     <div layout:fragment="contents" class="pt-5">
 
-        <h2 class="card-title">ユーザー登録</h2>
+        <h2 class="card-title">ユーザー更新</h2>
 
         <div class="row">
             <div class="col-8">
 
                 <div class="card">
 
-                    <form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/signup}">
+                    <form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/user/{id}(id=${id})}">
 
                         <div class="form-group form-row">
                             <label class="col-4" for="username">アカウント</label>
@@ -54,12 +102,6 @@
 
                     </form>
 
-                </div>
-
-                <div class="list-group mt-5">
-                    <div class="list-group-item">
-                        <a href="#" th:href="@{/login}">ログイン</a>
-                    </div>
                 </div>
             </div>
             <div class="col">

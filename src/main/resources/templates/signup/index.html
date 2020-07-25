@@ -32,15 +32,8 @@ $(function(){
 		};
 		
 		var error = function(xhr, status, errorThrown) {
-			alert("サーバー側でエラーが発生しました。");
+			alert("エラーが発生しました。");
 			console.log([xhr, status, errorThrown]);
-
-			var json_data = JSON.parse(xhr.responseText);
-        	for (var i  in json_data) {
-	        	console.log(json_data[i]);
-	        	console.log(json_data[i].code);
-	        	console.log(json_data[i].default_message);
-        	}
 		}
 
 		var complete = function(){
