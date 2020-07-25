@@ -1,5 +1,7 @@
 package com.example.spring.controller;
 
+import java.util.*;
+
 import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.*;
@@ -54,6 +56,14 @@ public class AppControllerAdvice {
 	public Flux<String> exceptionHandler(NonUniqueResultException exception) {
 		log.warn("エラー件数 {}", 1, exception);
 		return Flux.just(exception.getMessage());
+	}
+
+	@ResponseBody
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(NoSuchElementException.class)
+	public Flux<String> exceptionHandler(NoSuchElementException exception) {
+		log.warn("エラー件数 {}", 1, exception);
+		return Flux.just("404 NOT FOUND");
 	}
 
 }

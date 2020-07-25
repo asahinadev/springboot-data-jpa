@@ -7,115 +7,73 @@
 <link rel="contents" th:href="@{/user}" id="index_url">
 
 <title>USERS</title>
-
-
-<script>
-$(function(){
-    var $form = $("form.card-body");
-    $form.on("submit", function() {
-
-        if ($form.find(":invalid").length > 0) {
-            alert("入力項目にエラーがあります。");
-            return false;
-        }
-
-        var method = $form.attr("method");
-        var action = $form.attr("action")
-        var data = JSON.stringify({
-            username: $form.find("input#username").val(),
-            email:    $form.find("input#email").val(),
-            password: $form.find("input#password").val(),
-        });
-        
-        var success = function (data, status) {
-            alert("登録が完了しました。");
-            console.log(data);
-            location.href = location.href;
-        };
-        
-        var error = function(xhr, status, errorThrown) {
-            alert("エラーが発生しました。");
-            console.log([xhr, status, errorThrown]);
-        }
-
-        var complete = function(){
-        }
-        
-        
-        $.ajax({
-            type:        method,
-            url:         action,
-            data:        data ,
-            contentType: 'application/json', 
-            dataType:    'json',
-            success:     success ,
-            error:       error,
-            complete:    complete 
-        });     
-        return false;
-    });
-});
-</script>
+<script th:src="@{/js/user/modify.js}"></script>
 
 </head>
 <body>
-    <div layout:fragment="contents" class="pt-5">
+	<div layout:fragment="contents" class="pt-5">
 
-        <h2 class="card-title">ユーザー更新</h2>
+		<h2 class="card-title">ユーザー更新</h2>
 
-        <div class="row">
-            <div class="col-8">
+		<div class="row">
+			<div class="col-8">
 
-                <div class="card">
+				<div class="card">
 
-                    <form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/user/{id}(id=${id})}">
+					<form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/user/{id}(id=${id})}">
 
-                        <div class="form-group form-row">
-                            <label class="col-4" for="username">アカウント</label>
-                            <!--  -->
-                            <input class="form-control col" th:field="*{username}" required pattern="^[a-zA-Z0-9]{8,16}">
-                            <div class="valid-feedback">必須項目／半角英数／8～16文字</div>
-                            <div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
-                        </div>
+						<div class="form-group form-row">
+							<label class="col-4" for="username">アカウント</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{username}" required pattern="^[a-zA-Z0-9]{8,16}">
+							<div class="valid-feedback">必須項目／半角英数／8～16文字</div>
+							<div class="invalid-feedback">必須項目／半角英数／8～16文字</div>
+						</div>
 
-                        <div class="form-group form-row">
-                            <label class="col-4" for="email">メールアドレス</label>
-                            <!--  -->
-                            <input class="form-control col" th:field="*{email}" type="email" required pattern=".*@.*\..*">
-                            <div class="valid-feedback">必須項目／メールアドレス形式</div>
-                            <div class="invalid-feedback">必須項目／メールアドレス形式</div>
-                        </div>
+						<div class="form-group form-row">
+							<label class="col-4" for="email">メールアドレス</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{email}" type="email" required pattern=".*@.*\..*">
+							<div class="valid-feedback">必須項目／メールアドレス形式</div>
+							<div class="invalid-feedback">必須項目／メールアドレス形式</div>
+						</div>
 
-                        <div class="form-group form-row">
-                            <label class="col-4" for="password">パスワード</label>
-                            <!--  -->
-                            <input class="form-control col" th:field="*{password}" type="password" pattern="^[a-zA-Z0-9]{8,16}">
-                            <div class="valid-feedback">変更時必須項目／半角英数／8～16文字</div>
-                            <div class="invalid-feedback">変更時必須項目／半角英数／8～16文字</div>
-                        </div>
+						<div class="form-group form-row">
+							<label class="col-4" for="password">パスワード</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{password}" type="password" pattern="^[a-zA-Z0-9]{8,16}">
+							<div class="valid-feedback">半角英数／8～16文字</div>
+							<div class="invalid-feedback">半角英数／8～16文字</div>
+						</div>
 
-                        <div class="row">
-                            <div class="offset-8 col-4">
-                                <button class="btn btn-primary btn-block">登録</button>
-                            </div>
-                        </div>
+						<div class="row my-3">
+							<div class="offset-8 col-4">
+								<button class="btn btn-primary btn-block">更新</button>
+							</div>
+						</div>
 
-                    </form>
+						<div class="row my-3">
+							<div class="offset-8 col-4">
+								<button type="button" class="btn btn-danger btn-block del_button">削除</button>
+							</div>
+						</div>
 
-                </div>
-            </div>
-            <div class="col">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <a class="fas fa-list" th:href="@{/user}" title="一覧">&nbsp;一覧</a>
-                    </div>
-                    <div class="list-group-item">
-                        <a class="fas fa-user-plus" th:href="@{/user/add}" title="登録">&nbsp;新規登録</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					</form>
+
+				</div>
+			</div>
+			<div class="col">
+				<div class="list-group">
+					<div class="list-group-item">
+						<a class="fas fa-list" th:href="@{/user}" title="一覧">&nbsp;一覧</a>
+					</div>
+					<div class="list-group-item">
+						<a class="fas fa-user-plus" th:href="@{/user/add}" title="登録">&nbsp;新規登録</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
 

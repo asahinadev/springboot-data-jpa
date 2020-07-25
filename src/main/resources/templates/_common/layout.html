@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<html 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-    class="h-100">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100">
 <head>
 
 <meta charset="UTF-8">
@@ -13,13 +10,7 @@
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
-<script>
-$(function(){
-    var index_url = $("#index_url").attr("href");
-    $("#headerNavi a.nav-link[href='"+index_url+"']").addClass("active");
-})
-</script>
+<script th:src="@{/js/common.js}"></script>
 
 </head>
 

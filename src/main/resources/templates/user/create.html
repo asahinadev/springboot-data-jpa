@@ -6,63 +6,8 @@
 <meta charset="UTF-8">
 <link rel="contents" th:href="@{/user}" id="index_url">
 
-<title>USERS</title>
-
-
-<script>
-$(function(){
-    var $form = $("form.card-body");
-    $form.on("submit", function() {
-
-        if ($form.find(":invalid").length > 0) {
-            alert("入力項目にエラーがあります。");
-            return false;
-        }
-
-        var method = $form.attr("method");
-        var action = $form.attr("action")
-        var data = JSON.stringify({
-            username: $form.find("input#username").val(),
-            email:    $form.find("input#email").val(),
-            password: $form.find("input#password").val(),
-        });
-        
-        var success = function (data, status) {
-            alert("登録が完了しました。");
-            console.log(data);
-            // location.href = "[[@{/login}]]?signup";
-        };
-        
-        var error = function(xhr, status, errorThrown) {
-            alert("サーバー側でエラーが発生しました。");
-            console.log([xhr, status, errorThrown]);
-
-            var json_data = JSON.parse(xhr.responseText);
-            for (var i  in json_data) {
-                console.log(json_data[i]);
-                console.log(json_data[i].code);
-                console.log(json_data[i].default_message);
-            }
-        }
-
-        var complete = function(){
-        }
-        
-        
-        $.ajax({
-            type:        method,
-            url:         action,
-            data:        data ,
-            contentType: 'application/json', 
-            dataType:    'json',
-            success:     success ,
-            error:       error,
-            complete:    complete 
-        });     
-        return false;
-    });
-});
-</script>
+<title>USERS - ADD</title>
+<script th:src="@{/js/user/create.js}"></script>
 
 </head>
 <body>
