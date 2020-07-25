@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100" layout:decorator="_common/layout">
+
+<head>
+
+<meta charset="UTF-8">
+<link rel="contents" th:href="@{/role}" id="index_url">
+
+<title>ROLES</title>
+<script th:src="@{/js/role/modify.js}"></script>
+
+</head>
+<body>
+	<div layout:fragment="contents" class="pt-5">
+
+		<h2 class="card-title">ロール更新</h2>
+
+		<div class="row">
+			<div class="col-8">
+
+				<div class="card">
+
+					<form class="card-body was-validated" novalidate th:object="${form}" method="POST" th:action="@{/role/{id}(id=${id})}">
+
+						<div class="form-group form-row">
+							<label class="col-4" for="code">コード</label>
+							<!--  -->
+							<input class="form-control col" th:field="*{code}" required pattern="^[a-zA-Z0-9]{4,50}">
+							<div class="valid-feedback">必須項目／半角英数／4～50文字</div>
+							<div class="invalid-feedback">必須項目／半角英数／4～50文字</div>
+						</div>
+
+                        <div class="form-group form-row">
+                            <label class="col-4" for="name">表示名</label>
+                            <!--  -->
+                            <input class="form-control col" th:field="*{name}" required pattern="^[a-zA-Z0-9]{4,50}">
+                            <div class="valid-feedback">必須項目／半角英数／4～50文字</div>
+                            <div class="invalid-feedback">必須項目／半角英数／4～50文字</div>
+                        </div>
+                        
+						<div class="row my-3">
+							<div class="offset-8 col-4">
+								<button class="btn btn-primary btn-block">更新</button>
+							</div>
+						</div>
+
+						<div class="row my-3">
+							<div class="offset-8 col-4">
+								<button type="button" class="btn btn-danger btn-block del_button">削除</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+			<div class="col">
+				<div class="list-group">
+					<div class="list-group-item">
+						<a class="fas fa-list" th:href="@{/role}" title="一覧">&nbsp;一覧</a>
+					</div>
+					<div class="list-group-item">
+						<a class="fas fa-plus" th:href="@{/role/add}" title="登録">&nbsp;新規登録</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

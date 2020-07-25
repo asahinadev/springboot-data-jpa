@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="h-100" layout:decorator="_common/layout">
+
+<head>
+
+<meta charset="UTF-8">
+<link rel="contents" th:href="@{/role}" id="index_url">
+
+<title>ROLES</title>
+
+</head>
+
+<body>
+	<div layout:fragment="contents" class="pt-5">
+
+		<h2 class="card-title">ロール一覧</h2>
+
+		<div class="row">
+			<div class="col-8">
+				<table class="table table-bordered " id="roles">
+					<thead>
+						<tr>
+							<th>コード</th>
+							<th>表示名</th>
+							<th>アクション</th>
+						</tr>
+					</thead>
+					<tbody th:each="role : ${list}" th:object="${role}">
+						<tr>
+							<td class="text-left" th:text="*{code}">CODE</td>
+							<td class="text-left" th:text="*{name}">NAME</td>
+							<td>
+								<div>
+									<!--  -->
+									<a class="btn btn-sm btn-primary fas fa-edit p-1" th:href="@{/role/{id}(id=*{id})}" title="編集"></a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col">
+				<div class="list-group">
+					<div class="list-group-item">
+						<a class="fas fa-plus" th:href="@{/role/add}" title="編集">&nbsp;新規登録</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

@@ -15,7 +15,7 @@ public class RolesController
 
 	@Autowired
 	public RolesController(RoleService service) {
-		super(service, "/role");
+		super(service, "role");
 	}
 
 	@Override
