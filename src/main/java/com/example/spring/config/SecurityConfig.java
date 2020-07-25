@@ -24,14 +24,10 @@ public class SecurityConfig {
 				.pathMatchers("/",
 						"/login/**",
 						"/signup/**",
+						"/css/**",
+						"/js/**",
 						"/webjars/**",
 						"/error/**",
-						"**/*.css",
-						"**/*.js",
-						"**/*.map",
-						"**/*.png",
-						"**/*.jpg",
-						"**/*.gif",
 						"/favicon.ico")
 				.permitAll()
 

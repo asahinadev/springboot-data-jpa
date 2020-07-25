@@ -10,8 +10,6 @@ import com.example.spring.entity.User;
 import com.example.spring.repository.*;
 import com.example.spring.user.*;
 
-import reactor.core.publisher.*;
-
 @Service
 public class UserService
 	extends CrudService<User, String, UserRepository>
@@ -50,14 +48,17 @@ public class UserService
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Objects.requireNonNull(username, "username is null");
 
-		return Mono.first(
-				Mono.just(repository.findByUsername(username)),
-				Mono.just(repository.findByEmail(username))
+		if (repository.countByUsername(username) != 0) {
+			return repository.findByUsername(username)
+					.map(UserDetailsImpl::new).get();
+		}
 
-		// 検索箇所を増やす場合は上記を利用
-		).map(e -> {
-			return e.get();
-		}).map(UserDetailsImpl::new).block();
+		if (repository.countByEmail(username) != 0) {
+			return repository.findByEmail(username)
+					.map(UserDetailsImpl::new).get();
+		}
+
+		throw new UsernameNotFoundException(username);
 	}
 
 }

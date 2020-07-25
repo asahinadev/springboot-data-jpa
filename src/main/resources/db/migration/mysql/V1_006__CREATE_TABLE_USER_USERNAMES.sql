@@ -1,0 +1,30 @@
+CREATE TABLE IF NOT EXISTS user_usernames (
+
+ username VARCHAR(255) NOT NULL,
+ 
+ UNIQUE KEY UIDX_USER_USERNAMES_01 (username)
+ 
+) ENGINE=InnoDB;
+
+DROP   TRIGGER IF EXISTS TRG_BI_USERS_BY_USERNAME;
+DROP   TRIGGER IF EXISTS TRG_BU_USERS_BY_USERNAME;
+
+DELIMITER //
+
+CREATE TRIGGER TRG_BI_USERS_BY_USERNAME
+    BEFORE INSERT ON users FOR EACH ROW
+
+BEGIN
+    INSERT INTO user_usernames (username) VALUES (new.username);
+END
+//
+
+CREATE TRIGGER TRG_BU_USERS_BY_USERNAME
+    BEFORE UPDATE ON users FOR EACH ROW
+
+BEGIN
+	DELETE FROM user_usernames WHERE username = old.username;
+    INSERT INTO user_usernames (username) VALUES ( new.username );
+END
+//
+

@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.propertyeditors.*;
+import org.springframework.dao.*;
 import org.springframework.http.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.*;
@@ -64,6 +65,14 @@ public class AppControllerAdvice {
 	public Flux<String> exceptionHandler(NoSuchElementException exception) {
 		log.warn("エラー件数 {}", 1, exception);
 		return Flux.just("404 NOT FOUND");
+	}
+
+	@ResponseBody
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public Flux<String> exceptionHandler(DataIntegrityViolationException exception) {
+		log.warn("エラー件数 {}", 1, exception);
+		return Flux.just("データベース処理でエラーが発生しました。");
 	}
 
 }

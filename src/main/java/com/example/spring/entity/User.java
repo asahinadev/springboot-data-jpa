@@ -17,8 +17,8 @@ import lombok.*;
 @Data
 @Entity
 @Table(name = "users", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "username"),
-		@UniqueConstraint(columnNames = "email"),
+		@UniqueConstraint(columnNames = { "username", "deleted" }),
+		@UniqueConstraint(columnNames = { "email", "deleted" }),
 })
 @EntityListeners({
 		AuditingEntityListener.class
